@@ -52,6 +52,7 @@ func main() {
 		cors.New(cors.Config{
 			AllowOrigins: []string{"*"},
 			AllowMethods: []string{"GET", "POST"},
+			AllowHeaders: []string{"Origin", "Content-Type"},
 		}),
 	)
 
