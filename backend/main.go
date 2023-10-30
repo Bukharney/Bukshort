@@ -8,7 +8,6 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -30,10 +29,6 @@ func RandomString(n int) string {
 
 func main() {
 	log.Println("Starting server...")
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
 
 	db_host := os.Getenv("DB_HOST")
 	db_port := os.Getenv("DB_PORT")
