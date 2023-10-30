@@ -3,17 +3,19 @@
   let shortURL = "";
 
   function shortenHandler() {
-    fetch("https://railway.app/project/f22076ea-5cc1-4c6e-97fd-d8b6c3ce55d9/", {
+    fetch("http://localhost:8080/shorten", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': '*',
       },
       body: JSON.stringify({
         url: originalURL
       })
     }).then(res => res.json()).then(data => {
       console.log(data);
-      shortURL = "https://railway.app/project/f22076ea-5cc1-4c6e-97fd-d8b6c3ce55d9/"+data.url;
+      shortURL = "http://localhost:8080/"+data.url;
     });
   }
 </script>
