@@ -50,7 +50,7 @@ func main() {
 
 	r.Use(
 		cors.New(cors.Config{
-			AllowOrigins: []string{"http://localhost:5173"},
+			AllowOrigins: []string{"https://railway.app/project/f22076ea-5cc1-4c6e-97fd-d8b6c3ce55d9"},
 			AllowMethods: []string{"GET", "POST"},
 		}),
 	)
