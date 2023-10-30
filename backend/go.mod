@@ -1,4 +1,4 @@
-module shorterULR
+module shorterURL
 
 go 1.21.1
 
