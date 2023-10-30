@@ -1,6 +1,6 @@
 module shorterURL
 
-go 1.21.1
+go 1.18
 
 require (
 	github.com/gin-contrib/cors v1.4.0
