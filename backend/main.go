@@ -70,12 +70,23 @@ func main() {
 			}
 
 			var url link
-			if err := db.Where("original_url = ?", data.URL).First(&url).Error; err != nil {
+			err := db.Where("original_url = ?", data.URL).First(&url).Error
+			if err == nil {
+				c.JSON(200, gin.H{"url": url.ShortURL})
+				return
+			}
+
+			if err != nil {
 				url = link{
 					ShortURL:    RandomString(6),
 					OriginalURL: data.URL,
 				}
 				re := db.Create(&url)
+				for re.Error != nil && re.Error.Error() == "Duplicate key! Retry with new one." {
+					url.ShortURL = RandomString(6)
+					re = db.Create(&url)
+				}
+
 				if re.Error != nil {
 					c.JSON(500, gin.H{"error": err.Error})
 					return
