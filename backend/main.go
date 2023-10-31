@@ -5,6 +5,7 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -19,10 +20,11 @@ type link struct {
 }
 
 func RandomString(n int) string {
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
 	b := make([]rune, n)
 	for i := range b {
-		b[i] = letters[rand.Intn(len(letters))]
+		b[i] = letters[r.Intn(len(letters))]
 	}
 	return string(b)
 }
