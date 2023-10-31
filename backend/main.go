@@ -50,7 +50,7 @@ func main() {
 
 	r.Use(
 		cors.New(cors.Config{
-			AllowOrigins: []string{"*"},
+			AllowOrigins: []string{"https://urlshorter.bukharney.tech/"},
 			AllowMethods: []string{"GET", "POST"},
 			AllowHeaders: []string{"Origin", "Content-Type"},
 		}),
