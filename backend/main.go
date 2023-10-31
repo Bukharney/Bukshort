@@ -86,6 +86,7 @@ func main() {
 				url.ShortURL = RandomString(6)
 				re = db.Create(&url)
 			}
+
 			if re.Error != nil {
 				c.JSON(500, gin.H{"error": err.Error})
 				return
