@@ -76,21 +76,19 @@ func main() {
 				return
 			}
 
-			if err != nil {
-				url = link{
-					ShortURL:    RandomString(6),
-					OriginalURL: data.URL,
-				}
-				re := db.Create(&url)
-				for re.Error != nil && re.Error.Error() == "Duplicate key! Retry with new one." {
-					url.ShortURL = RandomString(6)
-					re = db.Create(&url)
-				}
+			url = link{
+				ShortURL:    RandomString(6),
+				OriginalURL: data.URL,
+			}
 
-				if re.Error != nil {
-					c.JSON(500, gin.H{"error": err.Error})
-					return
-				}
+			re := db.Create(&url)
+			for re.Error != nil {
+				url.ShortURL = RandomString(6)
+				re = db.Create(&url)
+			}
+			if re.Error != nil {
+				c.JSON(500, gin.H{"error": err.Error})
+				return
 			}
 
 			c.JSON(200, gin.H{"url": url.ShortURL})
