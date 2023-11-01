@@ -6,23 +6,19 @@
 
 	async function shortenHandler() {
 		loading = true;
-		try {
-			await fetch('https://shorterurl.bukharney.tech/shorten', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					url: originalURL
-				})
+		await fetch('https://shorterurl.bukharney.tech/shorten', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				url: originalURL
 			})
-				.then((res) => res.json())
-				.then((data) => {
-					shortURL = data.shortURL;
-				});
-		} catch (e) {
-			console.error(e);
-		}
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				shortURL = data.url;
+			});
 		loading = false;
 	}
 
