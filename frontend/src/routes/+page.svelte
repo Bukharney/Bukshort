@@ -115,7 +115,7 @@
 						</div>
 					</div>
 				</div>
-				{#if shortURL == '' && !loading}
+				{#if shortURL !== '' && !loading}
 					<div
 						class="bg-white relative isolate overflow-hidden px-6 py-6 my-6 shadow-xl rounded-3xl sm:px-16 lg:flex lg:px-24"
 					>
