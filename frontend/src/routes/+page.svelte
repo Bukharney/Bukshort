@@ -39,7 +39,7 @@
 	</script>
 {:else}
 	<script>
-		document.title = 'ShorterURL';
+		document.title = 'BukShort';
 	</script>
 {/if}
 
@@ -100,7 +100,7 @@
 							<button
 								class=" {loading
 									? 'cursor-wait'
-									: 'cursor-pointer'} rounded-md border bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-lg hover:border-indigo-600 hover:bg-indigo-600 hover:text-white"
+									: 'cursor-pointer hover:border-indigo-600 hover:bg-indigo-600 hover:text-white'} rounded-md border bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-lg"
 								on:click={() => {
 									if (originalURL !== '' && isValidURL(originalURL)) {
 										err = false;
