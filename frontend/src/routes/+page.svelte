@@ -69,7 +69,7 @@
 
 <body>
 	<div class="bg-white">
-		<div class="mx-12 max-w-7xl">
+		<div class="max-w-7xl mx-auto md:mx-12">
 			<div
 				class="relative isolate overflow-hidden px-6 py-6 my-6 shadow-xl sm:rounded-3xl sm:px-16 lg:flex lg:px-24"
 			>

@@ -54,13 +54,14 @@ func main() {
 		cors.New(cors.Config{
 			AllowOrigins:     []string{"https://urlshorter.bukharney.tech", "https://shorter-url-bukharney.vercel.app"},
 			AllowMethods:     []string{"GET", "POST"},
-			AllowHeaders:     []string{"Origin", "Content-Type"},
+			AllowHeaders:     []string{"Content-Type"},
 			AllowCredentials: true,
 		}),
 	)
 
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{"message": "Hello World!"})
+		c.Redirect(302, "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")
 	})
 
 	r.POST(
@@ -105,6 +106,8 @@ func main() {
 	r.GET(
 		"/:shortURL",
 		func(c *gin.Context) {
+			c.ClientIP()
+
 			var url link
 			if err := db.Where("short_url = ?", c.Param("shortURL")).First(&url).Error; err != nil {
 				c.JSON(404, gin.H{"error": "URL not found"})
@@ -112,12 +115,9 @@ func main() {
 			}
 
 			c.Redirect(302, url.OriginalURL)
+
 		},
 	)
-
-	r.GET("/health", func(c *gin.Context) {
-		c.JSON(200, gin.H{"status": "ok"})
-	})
 
 	r.Run()
 }
