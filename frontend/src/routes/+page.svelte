@@ -68,10 +68,10 @@
 </header>
 
 <body>
-	<div class="bg-white">
-		<div class="max-w-7xl mx-auto md:mx-12">
+	<div class="relative bg-white">
+		<div class="max-w-7xl mx-12 xl:mx-auto">
 			<div
-				class="relative isolate overflow-hidden px-6 py-6 my-6 shadow-xl sm:rounded-3xl sm:px-16 lg:flex lg:px-24"
+				class="relative isolate overflow-hidden px-6 py-6 my-6 shadow-xl rounded-3xl sm:px-16 lg:flex lg:px-24"
 			>
 				<div class="relative h-full w-full text-white">
 					<div class="grid-cols-flow grid-rows-flow grid gap-2 py-2 text-black">
@@ -113,7 +113,7 @@
 			</div>
 			{#if shortURL !== '' && !loading}
 				<div
-					class="relative isolate overflow-hidden px-6 py-6 my-6 shadow-xl sm:rounded-3xl sm:px-16 lg:flex lg:px-24"
+					class="relative isolate overflow-hidden px-6 py-6 my-6 shadow-xl rounded-3xl sm:px-16 lg:flex lg:px-24"
 				>
 					<div class="relative h-full w-full text-white">
 						<div class="grid-cols-flow grid-rows-flow grid gap-2 py-2">
@@ -139,7 +139,7 @@
 				</div>
 			{:else if loading}
 				<div
-					class="relative isolate overflow-hidden px-6 py-6 my-6 shadow-xl sm:rounded-3xl sm:px-16 lg:flex lg:px-24"
+					class="relative isolate overflow-hidden px-6 py-6 my-6 shadow-xl rounded-3xl sm:px-16 lg:flex lg:px-24"
 				>
 					<div class="flex items-center justify-center h-32 w-full">
 						<div

@@ -115,7 +115,6 @@ func main() {
 			}
 
 			c.Redirect(302, url.OriginalURL)
-
 		},
 	)
 
