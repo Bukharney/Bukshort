@@ -50,6 +50,8 @@ func main() {
 
 	r := gin.Default()
 
+	gin.SetMode(gin.ReleaseMode)
+
 	r.Use(
 		cors.New(cors.Config{
 			AllowOrigins:     []string{"https://urlshorter.bukharney.tech", "https://shorter-url-bukharney.vercel.app"},
