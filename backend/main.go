@@ -56,7 +56,7 @@ func main() {
 		cors.New(cors.Config{
 			AllowOrigins:     []string{"https://bukshort.bukharney.tech/"},
 			AllowMethods:     []string{"GET", "POST"},
-			AllowHeaders:     []string{"Content-Type"},
+			AllowHeaders:     []string{"Origin", "Content-Type"},
 			AllowCredentials: true,
 		}),
 	)
