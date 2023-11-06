@@ -54,7 +54,7 @@ func main() {
 
 	r.Use(
 		cors.New(cors.Config{
-			AllowOrigins:     []string{"https://buksort.bukharney.tech", "https://shorter-url-bukharney.vercel.app"},
+			AllowOrigins:     []string{"https://bukshort.bukharney.tech", "https://shorter-url-bukharney.vercel.app"},
 			AllowMethods:     []string{"GET", "POST"},
 			AllowHeaders:     []string{"Origin", "Content-Type"},
 			AllowCredentials: true,
