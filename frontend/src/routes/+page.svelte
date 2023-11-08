@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { toast } from '@zerodevx/svelte-toast';
 	let originalURL = '';
 	let shortURL = '';
 	let err = false;
@@ -30,6 +31,18 @@
 		}
 
 		return true;
+	}
+
+	function copyToClipboard() {
+		navigator.clipboard.writeText('https://shorterurl.bukharney.tech/' + shortURL);
+		toast.push('Copied to clipboard!', {
+			theme: {
+				'--toastBackground': '#4F46E5',
+				'--toastProgressBackground': '#C7D2FE',
+				'--toastProgressFill': '#4F46E5',
+				'--toastColor': '#fff'
+			}
+		});
 	}
 </script>
 
@@ -115,7 +128,7 @@
 						</div>
 					</div>
 				</div>
-				{#if shortURL !== '' && !loading}
+				{#if shortURL == '' && !loading}
 					<div
 						class="bg-white relative isolate overflow-hidden px-6 py-6 my-6 shadow-xl rounded-3xl sm:px-16 lg:flex lg:px-24"
 					>
@@ -128,9 +141,7 @@
 								</div>
 								<button
 									class="rounded-md border bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-md hover:border-indigo-600 hover:bg-indigo-600 hover:text-white"
-									on:click={() => {
-										navigator.clipboard.writeText('https://shorterurl.bukharney.tech/' + shortURL);
-									}}>Copy</button
+									on:click={copyToClipboard}>Copy</button
 								>
 								<button
 									class="rounded-md border bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-md hover:border-indigo-600 hover:bg-indigo-600 hover:text-white"
@@ -164,4 +175,10 @@
 </div>
 
 <style>
+	:root {
+		--toastContainerTop: auto;
+		--toastContainerRight: auto;
+		--toastContainerBottom: 1rem;
+		--toastContainerLeft: 1rem;
+	}
 </style>
