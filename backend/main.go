@@ -19,6 +19,10 @@ type link struct {
 	OriginalURL string `gorm:"unique"`
 }
 
+type ShortenReq struct {
+	URL string `json:"url" binding:"required"`
+}
+
 func RandomString(n int) string {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
@@ -29,9 +33,40 @@ func RandomString(n int) string {
 	return string(b)
 }
 
-func main() {
-	log.Println("Starting server...")
+func Shorten(c *gin.Context, db *gorm.DB) {
+	var data ShortenReq
+	if err := c.ShouldBindJSON(&data); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
 
+	var url link
+	err := db.Where("original_url = ?", data.URL).First(&url).Error
+	if err == nil {
+		c.JSON(200, gin.H{"url": url.ShortURL})
+		return
+	}
+
+	url = link{
+		ShortURL:    RandomString(6),
+		OriginalURL: data.URL,
+	}
+
+	re := db.Create(&url)
+	for re.Error != nil {
+		url.ShortURL = RandomString(6)
+		re = db.Create(&url)
+	}
+
+	if re.Error != nil {
+		c.JSON(500, gin.H{"error": err.Error})
+		return
+	}
+
+	c.JSON(200, gin.H{"url": url.ShortURL})
+}
+
+func DbConfig() (*gorm.DB, error) {
 	db_host := os.Getenv("DB_HOST")
 	db_port := os.Getenv("DB_PORT")
 	db_user := os.Getenv("DB_USERNAME")
@@ -41,12 +76,24 @@ func main() {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable", db_host, db_user, db_password, db_name, db_port)
 	db, err := gorm.Open(postgres.New(postgres.Config{
 		DSN: dsn,
-	}), &gorm.Config{})
+	}), &gorm.Config{
+		SkipDefaultTransaction: true,
+	})
 	if err != nil {
-		log.Fatal("Error connecting to database")
+		return nil, err
 	}
 
 	db.AutoMigrate(&link{})
+	return db, nil
+}
+
+func main() {
+	log.Println("Starting server...")
+
+	db, err := DbConfig()
+	if err != nil {
+		log.Fatal("Error connecting to database")
+	}
 
 	r := gin.Default()
 
@@ -67,49 +114,14 @@ func main() {
 	})
 
 	r.POST(
-		"/shorten",
-		func(c *gin.Context) {
-			var data struct {
-				URL string `json:"url" binding:"required"`
-			}
-
-			if err := c.ShouldBindJSON(&data); err != nil {
-				c.JSON(400, gin.H{"error": err.Error()})
-				return
-			}
-
-			var url link
-			err := db.Where("original_url = ?", data.URL).First(&url).Error
-			if err == nil {
-				c.JSON(200, gin.H{"url": url.ShortURL})
-				return
-			}
-
-			url = link{
-				ShortURL:    RandomString(6),
-				OriginalURL: data.URL,
-			}
-
-			re := db.Create(&url)
-			for re.Error != nil {
-				url.ShortURL = RandomString(6)
-				re = db.Create(&url)
-			}
-
-			if re.Error != nil {
-				c.JSON(500, gin.H{"error": err.Error})
-				return
-			}
-
-			c.JSON(200, gin.H{"url": url.ShortURL})
+		"/shorten", func(c *gin.Context) {
+			Shorten(c, db)
 		},
 	)
 
 	r.GET(
 		"/:shortURL",
 		func(c *gin.Context) {
-			c.ClientIP()
-
 			var url link
 			if err := db.Where("short_url = ?", c.Param("shortURL")).First(&url).Error; err != nil {
 				c.JSON(404, gin.H{"error": "URL not found"})
