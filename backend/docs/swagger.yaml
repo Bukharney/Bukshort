@@ -1,0 +1,77 @@
+definitions:
+  main.ErrorRes:
+    properties:
+      error:
+        type: string
+    type: object
+  main.ShortenReq:
+    properties:
+      url:
+        type: string
+    required:
+    - url
+    type: object
+  main.ShortenRes:
+    properties:
+      url:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a URL shortener API
+  title: URL Shortener API
+  version: "1"
+paths:
+  /{shortURL}:
+    get:
+      description: Get a URL
+      parameters:
+      - description: Short URL
+        in: path
+        name: shortURL
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.ShortenRes'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.ErrorRes'
+      summary: Get a URL
+      tags:
+      - shorten
+  /shorten:
+    post:
+      description: Shorten a URL
+      parameters:
+      - description: URL to shorten
+        in: body
+        name: url
+        required: true
+        schema:
+          $ref: '#/definitions/main.ShortenReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.ShortenRes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.ErrorRes'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.ErrorRes'
+      summary: Shorten a URL
+      tags:
+      - shorten
+swagger: "2.0"
