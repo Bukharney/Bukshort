@@ -1,4 +1,4 @@
-# URL Shortener Website
+# Bukshort
 
 ![GitHub](https://img.shields.io/github/license/Bukharney/shorterURL)
 ![GitHub](https://img.shields.io/github/release/Bukharney/shorterURL)
@@ -8,6 +8,7 @@ A simple and efficient URL shortener web application built with Go for the backe
 ## Table of Contents
 
 - [Features](#features)
+- [Documentation](#documentation)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Contributing](#contributing)
@@ -19,6 +20,10 @@ A simple and efficient URL shortener web application built with Go for the backe
 - Easily share shortened links via social media or other platforms.
 - Clean and responsive user interface.
 - Secure and efficient handling of short URLs.
+
+## Documentation
+
+The API documentation for Bukshort can be found at [https://shorterurl.bukharney.tech/docs](https://shorterurl.bukharney.tech/docs/index.html)
 
 ## Prerequisites
 
@@ -34,13 +39,13 @@ Before you get started, make sure you have the following prerequisites installed
 1. Clone this repository to your local machine:
 
    ```bash
-   git clone https://github.com/Bukharney/shorterURL.git
+   git clone https://github.com/Bukharney/Bukshort.git
    ```
 
 2. Change to the project directory:
 
    ```bash
-   cd shorterURL
+   cd Bukshort
    ```
 
 3. Install the frontend dependencies:
