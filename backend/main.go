@@ -105,7 +105,7 @@ func GetURL(c *gin.Context, db *gorm.DB) {
 		return
 	}
 
-	c.JSON(200, gin.H{"url": url.OriginalURL})
+	c.Redirect(302, url.OriginalURL)
 }
 
 func GetSomethings(c *gin.Context, db *gorm.DB) {
@@ -113,27 +113,25 @@ func GetSomethings(c *gin.Context, db *gorm.DB) {
 }
 
 func DbConfig() (*gorm.DB, error) {
-
-	db_host := "localhost"
-	db_port := "5432"
-	db_user := "postgres"
-	db_name := "postgres"
-	db_password := "postgres"
-
-	host, err := os.Hostname()
-	if err != nil {
-		return nil, err
+	mustGetenv := func(k string) string {
+		v := os.Getenv(k)
+		if v == "" {
+			log.Fatalf("Fatal Error in connect_unix.go: %s environment variable not set.\n", k)
+		}
+		return v
 	}
+	// Note: Saving credentials in environment variables is convenient, but not
+	// secure - consider a more secure solution such as
+	// Cloud Secret Manager (https://cloud.google.com/secret-manager) to help
+	// keep secrets safe.
+	var (
+		db_user     = mustGetenv("DB_USER")
+		db_password = mustGetenv("DB_PASS")
+		db_host     = mustGetenv("INSTANCE_UNIX_SOCKET")
+		db_name     = mustGetenv("DB_NAME")
+	)
 
-	if host == "railway" {
-		db_host = os.Getenv("DB_HOST")
-		db_port = os.Getenv("DB_PORT")
-		db_user = os.Getenv("DB_USERNAME")
-		db_name = os.Getenv("DB_DATABASE")
-		db_password = os.Getenv("DB_PASSWORD")
-	}
-
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable", db_host, db_user, db_password, db_name, db_port)
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s", db_host, db_user, db_password, db_name)
 	db, err := gorm.Open(postgres.New(postgres.Config{
 		DSN: dsn,
 	}), &gorm.Config{
@@ -151,20 +149,26 @@ func DbConfig() (*gorm.DB, error) {
 // @version 1
 // @description This is a URL shortener API
 
-// @host localhost:8080
+// @host gbukshort.bukharney.tech
+// @BasePath /
+// @schemes https
 func main() {
-	log.Println("Starting server...")
-
+	log.Println("Connecting to database...")
 	db, err := DbConfig()
 	if err != nil {
-		log.Fatal("Error connecting to database")
+		log.Fatalf("Fatal Error in main.go: %s\n", err)
 	}
 
 	r := gin.Default()
 
+	r.Use(gin.Recovery())
+	r.Use(gin.Logger())
+
+	gin.SetMode(gin.ReleaseMode)
+
 	r.Use(
 		cors.New(cors.Config{
-			AllowOrigins:     []string{"https://bukshort.bukharney.tech", "https://shorter-url-bukharney.vercel.app", "*"},
+			AllowOrigins:     []string{"https://bukshort.bukharney.tech", "https://shorter-url-bukharney.vercel.app", "https://gbukshort.bukharney.tech/", "*"},
 			AllowMethods:     []string{"GET", "POST"},
 			AllowHeaders:     []string{"Content-Type"},
 			AllowCredentials: true,
@@ -190,5 +194,9 @@ func main() {
 		},
 	)
 
-	r.Run()
+	log.Println("Starting server...")
+	post := os.Getenv("PORT")
+	r.Run(
+		fmt.Sprintf(":%s", post),
+	)
 }
