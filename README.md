@@ -23,7 +23,7 @@ A simple and efficient URL shortener web application built with Go for the backe
 
 ## Documentation
 
-The API documentation for Bukshort can be found at [https://shorterurl.bukharney.tech/docs](https://shorterurl.bukharney.tech/docs/index.html)
+The API documentation for Bukshort can be found at [https://gbukshort.bukharney.tech/docs](https://gbukshort.bukharney.tech/docs/index.html)
 
 ## Prerequisites
 
