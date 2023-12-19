@@ -1,3 +1,4 @@
+basePath: /
 definitions:
   main.ErrorRes:
     properties:
@@ -16,7 +17,7 @@ definitions:
       url:
         type: string
     type: object
-host: localhost:8080
+host: gbukshort.bukharney.tech
 info:
   contact: {}
   description: This is a URL shortener API
@@ -74,4 +75,6 @@ paths:
       summary: Shorten a URL
       tags:
       - shorten
+schemes:
+- https
 swagger: "2.0"
