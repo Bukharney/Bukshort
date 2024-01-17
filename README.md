@@ -1,8 +1,5 @@
 # Bukshort
 
-![GitHub](https://img.shields.io/github/license/Bukharney/shorterURL)
-![GitHub](https://img.shields.io/github/release/Bukharney/shorterURL)
-
 A simple and efficient URL shortener web application built with Go for the backend and Svelte for the frontend. This project allows users to shorten long URLs into more manageable and shareable links.
 
 ## Table of Contents
