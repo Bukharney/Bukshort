@@ -142,7 +142,7 @@ func DbConfig() (*gorm.DB, error) {
 // @version 1
 // @description This is a URL shortener API
 
-// @host gbukshort.bukharney.tech
+// @host shortenurl.bukharney.tech
 // @BasePath /
 // @schemes https
 func main() {
@@ -161,7 +161,7 @@ func main() {
 
 	r.Use(
 		cors.New(cors.Config{
-			AllowOrigins:     []string{"https://bukshort.bukharney.tech", "https://shorter-url-bukharney.vercel.app", "https://gbukshort.bukharney.tech", "*"},
+			AllowOrigins:     []string{"*"},
 			AllowMethods:     []string{"GET", "POST"},
 			AllowHeaders:     []string{"Content-Type"},
 			AllowCredentials: true,
