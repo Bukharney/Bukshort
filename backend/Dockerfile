@@ -11,3 +11,5 @@ COPY . .
 RUN go build -o main .
 
 EXPOSE $PORT
+
+CMD ["/app/main"]

@@ -125,18 +125,11 @@ func DbConfig() (*gorm.DB, error) {
 	// Cloud Secret Manager (https://cloud.google.com/secret-manager) to help
 	// keep secrets safe.
 	var (
-		db_user     = mustGetenv("DB_USER")
-		db_password = mustGetenv("DB_PASS")
-		db_host     = mustGetenv("INSTANCE_UNIX_SOCKET")
-		db_name     = mustGetenv("DB_NAME")
+		db_url = mustGetenv("DB_URL")
 	)
 
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s", db_host, db_user, db_password, db_name)
-	db, err := gorm.Open(postgres.New(postgres.Config{
-		DSN: dsn,
-	}), &gorm.Config{
-		SkipDefaultTransaction: true,
-	})
+	db, err := gorm.Open(postgres.Open(db_url), &gorm.Config{})
+
 	if err != nil {
 		return nil, err
 	}
