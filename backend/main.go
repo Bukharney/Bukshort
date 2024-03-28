@@ -108,27 +108,28 @@ func GetURL(c *gin.Context, db *gorm.DB) {
 	c.Redirect(302, url.OriginalURL)
 }
 
-func GetSomethings(c *gin.Context, db *gorm.DB) {
-	c.Redirect(302, "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")
+func mustGetenv(k string) (string, error) {
+	v := os.Getenv(k)
+	if v == "" {
+		return "", fmt.Errorf("%s must be set", k)
+	}
+	return v, nil
 }
 
 func DbConfig() (*gorm.DB, error) {
-	mustGetenv := func(k string) string {
-		v := os.Getenv(k)
-		if v == "" {
-			log.Fatalf("Fatal Error in connect_unix.go: %s environment variable not set.\n", k)
-		}
-		return v
-	}
+
 	// Note: Saving credentials in environment variables is convenient, but not
 	// secure - consider a more secure solution such as
 	// Cloud Secret Manager (https://cloud.google.com/secret-manager) to help
 	// keep secrets safe.
-	var (
-		db_url = mustGetenv("DB_URL")
-	)
+	var db_url, err = mustGetenv("DB_URL")
+	if err != nil {
+		return nil, err
+	}
 
-	db, err := gorm.Open(postgres.Open(db_url), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(db_url), &gorm.Config{
+		SkipDefaultTransaction: true,
+	})
 
 	if err != nil {
 		return nil, err
@@ -171,7 +172,7 @@ func main() {
 	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	r.GET("/", func(c *gin.Context) {
-		GetSomethings(c, db)
+		c.Redirect(302, "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")
 	})
 
 	r.POST(
