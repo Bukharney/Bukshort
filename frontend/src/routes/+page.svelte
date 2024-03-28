@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { toast } from '@zerodevx/svelte-toast';
-	const API = 'https://gbukshort.bukharney.tech/';
+	const API_URL = process.env.API_URL;
 	let originalURL = '';
 	let shortURL = '';
 	let err = false;
@@ -8,7 +8,7 @@
 
 	async function shortenHandler() {
 		loading = true;
-		await fetch(API + 'shorten', {
+		await fetch(API_URL + 'shorten', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -35,7 +35,7 @@
 	}
 
 	function copyToClipboard() {
-		navigator.clipboard.writeText(API + shortURL);
+		navigator.clipboard.writeText(API_URL + shortURL);
 		toast.push('Copied to clipboard!', {
 			theme: {
 				'--toastBackground': '#4F46E5',
@@ -138,7 +138,7 @@
 								<div
 									class="pointer-events-none rounded-md border bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-md focus-visible:outline"
 								>
-									{API + shortURL}
+									{API_URL + shortURL}
 								</div>
 								<button
 									class="rounded-md border bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-md hover:border-indigo-600 hover:bg-indigo-600 hover:text-white"
@@ -147,7 +147,7 @@
 								<button
 									class="rounded-md border bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-md hover:border-indigo-600 hover:bg-indigo-600 hover:text-white"
 									on:click={() => {
-										window.location.href = API + shortURL;
+										window.location.href = API_URL + shortURL;
 									}}>Go to this link</button
 								>
 							</div>

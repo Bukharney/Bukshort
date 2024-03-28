@@ -108,35 +108,29 @@ func GetURL(c *gin.Context, db *gorm.DB) {
 	c.Redirect(302, url.OriginalURL)
 }
 
-func GetSomethings(c *gin.Context, db *gorm.DB) {
-	c.Redirect(302, "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")
+func mustGetenv(k string) (string, error) {
+	v := os.Getenv(k)
+	if v == "" {
+		return "", fmt.Errorf("%s must be set", k)
+	}
+	return v, nil
 }
 
 func DbConfig() (*gorm.DB, error) {
-	mustGetenv := func(k string) string {
-		v := os.Getenv(k)
-		if v == "" {
-			log.Fatalf("Fatal Error in connect_unix.go: %s environment variable not set.\n", k)
-		}
-		return v
-	}
+
 	// Note: Saving credentials in environment variables is convenient, but not
 	// secure - consider a more secure solution such as
 	// Cloud Secret Manager (https://cloud.google.com/secret-manager) to help
 	// keep secrets safe.
-	var (
-		db_user     = mustGetenv("DB_USER")
-		db_password = mustGetenv("DB_PASS")
-		db_host     = mustGetenv("INSTANCE_UNIX_SOCKET")
-		db_name     = mustGetenv("DB_NAME")
-	)
+	var db_url, err = mustGetenv("DB_URL")
+	if err != nil {
+		return nil, err
+	}
 
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s", db_host, db_user, db_password, db_name)
-	db, err := gorm.Open(postgres.New(postgres.Config{
-		DSN: dsn,
-	}), &gorm.Config{
+	db, err := gorm.Open(postgres.Open(db_url), &gorm.Config{
 		SkipDefaultTransaction: true,
 	})
+
 	if err != nil {
 		return nil, err
 	}
@@ -149,7 +143,7 @@ func DbConfig() (*gorm.DB, error) {
 // @version 1
 // @description This is a URL shortener API
 
-// @host gbukshort.bukharney.tech
+// @host shortenurl.bukharney.tech
 // @BasePath /
 // @schemes https
 func main() {
@@ -168,7 +162,7 @@ func main() {
 
 	r.Use(
 		cors.New(cors.Config{
-			AllowOrigins:     []string{"https://bukshort.bukharney.tech", "https://shorter-url-bukharney.vercel.app", "https://gbukshort.bukharney.tech/", "*"},
+			AllowOrigins:     []string{"*"},
 			AllowMethods:     []string{"GET", "POST"},
 			AllowHeaders:     []string{"Content-Type"},
 			AllowCredentials: true,
@@ -178,7 +172,7 @@ func main() {
 	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	r.GET("/", func(c *gin.Context) {
-		GetSomethings(c, db)
+		c.Redirect(302, "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")
 	})
 
 	r.POST(
