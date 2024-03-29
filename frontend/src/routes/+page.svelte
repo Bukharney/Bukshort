@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { toast } from '@zerodevx/svelte-toast';
-	const API_URL = process.env.API_URL;
+	const API_URL = 'https://shortenurl.bukharney.tech/';
 	let originalURL = '';
 	let shortURL = '';
 	let err = false;
