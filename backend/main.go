@@ -104,7 +104,6 @@ func GetURL(c *gin.Context, db *gorm.DB) {
 		c.JSON(404, gin.H{"error": "URL not found"})
 		return
 	}
-
 	c.Redirect(302, url.OriginalURL)
 }
 
