@@ -16,14 +16,14 @@ Bukshort is designed with a **single-domain reverse proxy architecture**. The Sv
 
 ```mermaid
 graph TD
-    User["Public User / Client Browser"] -->|HTTPS| CF["Cloudflare Tunnel (cloudflared)"]
-    CF -->|Port 3000| FE["SvelteKit Frontend (Node.js Adapter)"]
+    User["🌐 Public User / Client Browser"] -->|HTTPS| CF["☁️ Cloudflare Tunnel (cloudflared)"]
+    CF -->|Port 3000| FE["⚡ SvelteKit Frontend (Node.js Adapter)"]
     
     subgraph Docker Network: app_net
-        FE -->|SSR Server Proxy /shorten| BE["Go Backend API (Gin Server :8080)"]
+        FE -->|SSR Server Proxy /shorten| BE["🐹 Go Backend API (Gin Server :8080)"]
         FE -->|SSR Server Proxy /:shortURL| BE
         FE -->|SSR Server Proxy /docs/*| BE
-        BE -->|GORM Driver / SQL| DB[("PostgreSQL Database :5432")]
+        BE -->|GORM Driver / SQL| DB[("🐘 PostgreSQL Database :5432")]
     end
 ```
 
@@ -39,27 +39,27 @@ sequenceDiagram
     participant BE as Go Backend (Gin)
     participant DB as PostgreSQL DB
 
-    Note over User, DB: 1. URL Shortening Request
-    User->>FE: POST /shorten (url)
-    FE->>BE: Forward POST http://backend:8080/shorten
-    BE->>DB: Query existing original_url
-    alt URL exists in DB
-        DB-->>BE: Return existing short_url
-    else New URL
-        BE->>BE: Generate Random Base62 Shortcode (6 chars)
-        BE->>DB: INSERT into links (short_url, original_url)
-        DB-->>BE: Success
+    alt URL Shortening Request
+        User->>FE: POST /shorten { "url": "https://example.com/very-long-link" }
+        FE->>BE: Forward POST http://backend:8080/shorten
+        BE->>DB: Query existing original_url
+        alt URL exists in DB
+            DB-->>BE: Return existing short_url
+        else New URL
+            BE->>BE: Generate Random Base62 Shortcode (6 chars)
+            BE->>DB: INSERT into links (short_url, original_url)
+            DB-->>BE: Success
+        end
+        BE-->>FE: JSON { "url": "aB3xD9" }
+        FE-->>User: 200 OK + QR Code Data
+    else Short URL Redirection
+        User->>FE: GET /aB3xD9
+        FE->>BE: Forward GET http://backend:8080/aB3xD9
+        BE->>DB: Query short_url = "aB3xD9"
+        DB-->>BE: Found original_url
+        BE-->>FE: 302 Redirect (Location: https://example.com/very-long-link)
+        FE-->>User: 302 Redirect to Original Destination
     end
-    BE-->>FE: JSON { url: short_url }
-    FE-->>User: 200 OK + QR Code Data
-
-    Note over User, DB: 2. Short URL Redirection
-    User->>FE: GET /aB3xD9
-    FE->>BE: Forward GET http://backend:8080/aB3xD9
-    BE->>DB: Query short_url = aB3xD9
-    DB-->>BE: Found original_url
-    BE-->>FE: 302 Redirect (Location: destination_url)
-    FE-->>User: 302 Redirect to Original Destination
 ```
 
 ---
