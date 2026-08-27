@@ -3,8 +3,8 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Enable pnpm via corepack
-RUN corepack enable && corepack prepare pnpm@latest --activate
+# Enable pnpm v9 via corepack
+RUN corepack enable && corepack prepare pnpm@9 --activate
 
 # Copy package manifests and install dependencies
 COPY package.json pnpm-lock.yaml ./
@@ -20,8 +20,8 @@ FROM node:20-alpine AS runner
 
 WORKDIR /app
 
-# Enable pnpm via corepack
-RUN corepack enable && corepack prepare pnpm@latest --activate
+# Enable pnpm v9 via corepack
+RUN corepack enable && corepack prepare pnpm@9 --activate
 
 # Copy package manifests and install production dependencies only
 COPY package.json pnpm-lock.yaml ./
