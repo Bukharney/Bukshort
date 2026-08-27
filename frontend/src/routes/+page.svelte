@@ -24,7 +24,8 @@
 		qrDataUrl = '';
 
 		try {
-			const res = await fetch(API_URL + 'shorten', {
+			const endpoint = API_URL ? (API_URL.endsWith('/') ? API_URL + 'shorten' : API_URL + '/shorten') : '/shorten';
+			const res = await fetch(endpoint, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
