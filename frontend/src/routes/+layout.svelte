@@ -4,4 +4,4 @@
 </script>
 
 <slot />
-<SvelteToast options={{ reversed: true, intro: { y: 192 } }} />
+<SvelteToast />

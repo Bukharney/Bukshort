@@ -1,1 +1,27 @@
+# Environment & Secrets
+.env
+.env.local
+*.env
+!.env.example
+backend/.env
+frontend/.env
+
+# Go binaries & temporary files
+backend/main
+backend/tmp/
+backend/bin/
+backend/.air.toml
+
+# SvelteKit & Node
+frontend/build/
+frontend/.svelte-kit/
+frontend/node_modules/
+
+# OS & IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Docker local overrides
 compose.yaml

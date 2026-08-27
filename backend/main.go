@@ -8,6 +8,7 @@ import (
 	"time"
 
 	_ "github.com/Bukharney/shorterURL/docs"
+	_ "github.com/joho/godotenv/autoload"
 
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -143,7 +144,7 @@ func DbConfig() (*gorm.DB, error) {
 // @version 1
 // @description This is a URL shortener API
 
-// @host shortenurl.bukharney.tech
+// @host short.jirapat.tech
 // @BasePath /
 // @schemes https
 func main() {
